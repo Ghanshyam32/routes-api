@@ -10,8 +10,12 @@ app.use(express.json());
 
 app.post("/routes", async (req, res) => {
   try {
+    const fieldMask = req.headers["x-goog-fieldmask"];
     const googleRes = await axios.post(`${URL}?key=${KEY}`, req.body, {
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "X-Goog-FieldMask": fieldMask, // Forward the header
+      },
     });
     res.json(googleRes.data);
   } catch (e) {
